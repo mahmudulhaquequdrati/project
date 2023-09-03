@@ -63,7 +63,7 @@ export default function Signature() {
               name="viewport"
               content="width=device-width, initial-scale=1.0"
             />
-            <title>{name ? name : "Your"}s Signature</title>
+            <title>Your Signature</title>
             <script src="https://cdn.tailwindcss.com"></script>
           </head>
           <body>
