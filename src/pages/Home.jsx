@@ -55,8 +55,8 @@ export default function Home() {
     <React.Fragment>
       <div className="flex min-h-screen justify-center items-center">
         <div className="mx-auto w-[88%] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.6)] py-4 px-6 ">
-          <div className="grid grid-cols-7 gap-3">
-            <div className="col-span-3 shadow-2xl rounded-lg m-4">
+          <div className="grid grid-cols-1 lg:grid-cols-7 gap-3">
+            <div className="lg:col-span-3 shadow-2xl rounded-lg m-4">
               <div className="bg-[#273762] p-6 rounded-t-lg">
                 <h2 className="font-semibold text-xl text-center text-white font-raleway">
                   Create Your Own Signature!
@@ -125,7 +125,7 @@ export default function Home() {
                 </button>
               </form>
             </div>
-            <div className="flex flex-col col-span-4 shadow-lg px-6 py-2  ">
+            <div className="flex flex-col lg:col-span-4 shadow-lg px-6 py-2  ">
               <div className="">
                 <div className=" flex gap-6 items-center">
                   <div className="">
