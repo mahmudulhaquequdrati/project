@@ -107,7 +107,7 @@ export default function Signature() {
               {/* </div> */}
               <div className="flex mt-4 gap-[0.15rem] justify-center">
                 <a
-                  href="https://www.facebook.com"
+                  href="https://www.facebook.com/bettertaxrelief"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -124,7 +124,7 @@ export default function Signature() {
                   </svg>
                 </a>
                 <a
-                  href="https://www.facebook.com"
+                  href="https://www.instagram.com/bettertaxrelief"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -141,7 +141,7 @@ export default function Signature() {
                   </svg>
                 </a>
                 <a
-                  href="https://www.facebook.com"
+                  href="https://www.linkedin.com/company/better-tax-relief"
                   target="_blank"
                   rel="noreferrer"
                 >
