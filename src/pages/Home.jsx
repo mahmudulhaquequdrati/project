@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Home() {
@@ -23,29 +24,41 @@ export default function Home() {
       reader.readAsDataURL(file);
     }
   };
+  // const [imageUrl, setImageUrl] = useState();
 
   const handleForm = (e) => {
     e.preventDefault();
 
-    navigate("/signature", {
-      state: {
-        name,
-        phone,
-        email,
-        title,
-        picture,
-        selectedFile,
-      },
+    let formData = new FormData();
+    // the image shoud be same {image,file direction}
+    formData.append("image", selectedFile);
+    formData.append("key", `6c4a83ed90b6322ba935689626e152ab`);
+    axios.post("https://api.imgbb.com/1/upload", formData).then((res) => {
+      if (res.status === 200) {
+        navigate("/signature", {
+          state: {
+            name,
+            phone,
+            email,
+            title,
+            imageUrl: res.data.data.url,
+          },
+        });
+      }
     });
   };
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
   return (
     <React.Fragment>
       <div className="flex min-h-screen justify-center items-center">
-        <div className="mx-auto w-[88%] shadow-2xl py-4 px-8 ">
+        <div className="mx-auto w-[88%] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.6)] py-4 px-6 ">
           <div className="grid grid-cols-7 gap-3">
-            <div className="col-span-3 shadow-lg rounded-lg m-4">
+            <div className="col-span-3 shadow-2xl rounded-lg m-4">
               <div className="bg-[#273762] p-6 rounded-t-lg">
-                <h2 className="font-semibold text-xl text-center text-white">
+                <h2 className="font-semibold text-xl text-center text-white font-raleway">
                   Create Your Own Signature!
                 </h2>
               </div>
@@ -53,18 +66,19 @@ export default function Home() {
                 onSubmit={handleForm}
                 className="flex flex-col px-8 py-5 space-y-3 w-full"
               >
-                <div className="text-center text-gray-500 font-light text-md -mt-2">
+                <div className="text-center font-raleway text-gray-600 font-light text-md -mt-2 relative">
                   <label
                     htmlFor="file"
                     className="border bg-gray-200 active:outline-none focus:outline-none py-2 px-4 rounded-md w-full block
-                    hover:bg-[#273762] hover:text-white cursor-pointer "
+                    hover:bg-[#273762] hover:text-white cursor-pointer z-10"
                   >
                     {selectedFile ? selectedFile?.name : "Add HeadShot*"}
                   </label>
+
                   <input
                     type="file"
                     id="file"
-                    className="hidden "
+                    className="absolute w-1 border-none -z-10 top-2 left-1/2"
                     placeholder="Name"
                     accept="image/*"
                     onChange={handleFileChange}
@@ -73,7 +87,7 @@ export default function Home() {
                 </div>
                 <input
                   type="text"
-                  className="border bg-gray-200 active:outline-none focus:outline-none py-2 px-4 rounded-md"
+                  className=" border bg-gray-200 active:outline-none focus:outline-none py-2 px-4 rounded-md placeholder:text-gray-600"
                   placeholder="Name Here*"
                   // value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -81,7 +95,7 @@ export default function Home() {
                 />
                 <input
                   type="text"
-                  className="border bg-gray-200 active:outline-none focus:outline-none py-2 px-4 rounded-md"
+                  className="border bg-gray-200 active:outline-none focus:outline-none py-2 px-4 rounded-md placeholder:text-gray-600"
                   placeholder="Title Here*"
                   // value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -89,7 +103,7 @@ export default function Home() {
                 />
                 <input
                   type="text"
-                  className="border bg-gray-200 active:outline-none focus:outline-none py-2 px-4 rounded-md"
+                  className="border bg-gray-200 active:outline-none focus:outline-none py-2 px-4 rounded-md placeholder:text-gray-600"
                   placeholder="Phone*"
                   // value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -97,7 +111,7 @@ export default function Home() {
                 />
                 <input
                   type="text"
-                  className="border bg-gray-200 active:outline-none focus:outline-none py-2 px-4 rounded-md"
+                  className="border bg-gray-200 active:outline-none focus:outline-none py-2 px-4 rounded-md placeholder:text-gray-600"
                   placeholder="Email*"
                   // value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -119,7 +133,10 @@ export default function Home() {
                     {selectedFile ? (
                       <img className="w-32 " src={picture} />
                     ) : (
-                      <img className="w-32 " src="./avatar.png" />
+                      <img
+                        className="w-32 "
+                        src="https://i.postimg.cc/MHLfRGff/index-modified.png"
+                      />
                     )}
                     {/* </div> */}
                     <div className="flex mt-4 gap-[0.15rem] justify-center">
@@ -141,7 +158,7 @@ export default function Home() {
                         </svg>
                       </a>
                       <a
-                        href="https://www.facebook.com"
+                        href="https://www.instagram.com"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -158,7 +175,7 @@ export default function Home() {
                         </svg>
                       </a>
                       <a
-                        href="https://www.facebook.com"
+                        href="https://www.linkedin.com"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -178,10 +195,13 @@ export default function Home() {
                   </div>
                   <div className="text-gray-700">
                     <h2 className="text-blue-700 font-medium">
-                      {name} | Better Tax Releif
+                      {name.length === 0 ? "Your Name" : name} | Better Tax
+                      Relief
                     </h2>
-                    <h3 className="py-2">{title}</h3>
-                    <div className="flex gap-2 ">
+                    <h3 className="py-1 text-sm font-medium">
+                      {title.length === 0 ? "Your Title" : title}
+                    </h3>
+                    <div className="flex gap-2 text-sm pt-1">
                       <p className="flex items-center gap-1 cursor-pointer">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -195,26 +215,17 @@ export default function Home() {
                         </svg>
                         {phone}
                       </p>
-                      <p className="flex gap-1">
-                        <svg
-                          width={16}
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M20.25 3.75v4.5m0-4.5h-4.5m4.5 0l-6 6m3 12c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 014.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 00-.38 1.21 12.035 12.035 0 007.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 011.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 01-2.25 2.25h-2.25z"
-                            fill="rgba(39,55,98,1)"
-                          />
-                        </svg>
-                        0493498394
+                      <p className="flex gap-1 text-sm">
+                        <img
+                          src="https://i.postimg.cc/SNvgCcbs/old-typical-phone.png"
+                          className="w-3.5
+                     h-4"
+                          alt=""
+                        />
+                        (866) 309-7718
                       </p>
                     </div>
-                    <p className="flex gap-1">
+                    <p className="flex gap-1 text-sm pt-1">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -225,9 +236,12 @@ export default function Home() {
                           fill="rgba(39,55,98,1)"
                         ></path>
                       </svg>
-                      {email}@bettertaxreleif.com
+                      {email}@bettertaxrelief.com
                     </p>
-                    <p className="flex gap-1">
+                    <Link
+                      to="https://www.bettertaxrelief.com"
+                      className="flex gap-1 text-sm pt-1"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -238,9 +252,9 @@ export default function Home() {
                           fill="rgba(39,55,98,1)"
                         ></path>
                       </svg>
-                      www.bettertaxreleif.com
-                    </p>
-                    <p className="flex gap-1">
+                      www.bettertaxrelief.com
+                    </Link>
+                    <p className="flex gap-1 pointer text-sm pt-1">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -251,30 +265,29 @@ export default function Home() {
                           fill="rgba(39,55,98,1)"
                         ></path>
                       </svg>
-                      232, avinew , NewYork City , USA
+                      2525 Main Street, Suite 550, Irvine, CA 92614
                     </p>
                   </div>
                 </div>
                 <img src="./ba-6.png" className="w-[80%] mt-6" alt="" />
               </div>
-              {/* picture */}
-              <div className="flex mt-2 text-gray-700 font-medium  py-6 ">
+              {/* information */}
+              <div className="flex mt-2 text-gray-700 font-bold  py-6 text-sm font-raleway">
                 <ol>
                   <li>
-                    1. Use this{" "}
+                    1. Use this
                     <Link
                       to="https://crop-circle.imageonline.co/"
                       className="text-red-500 underline"
                       target="_blank"
                     >
-                      online tool to crop, resize, round
+                      {" "}
+                      online tool for crop, resize, round
                     </Link>{" "}
                     your image.
                   </li>
-                  <li>
-                    2. Image size 500 x 500 pixel or any size of 1:1 ratio.
-                  </li>
-                  <li>3. Only allow jpg,png format.</li>
+                  <li>2. Image size 500x500px or any size of 1:1 ratio.</li>
+                  <li>3. Only allow jpg, png format.</li>
                 </ol>
               </div>
             </div>
